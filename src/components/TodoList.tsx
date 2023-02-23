@@ -1,23 +1,23 @@
 import React from 'react';
-import { TodoType } from '../helpers/todoType';
+import { Action, TodoType } from '../helpers/todoType';
 import SingleTodo from './SingleTodo';
 
 interface Props {
-  todos: TodoType[];
-  setTodos: React.Dispatch<React.SetStateAction<TodoType[]>>;
+  state: TodoType[];
+  dispatch: React.Dispatch<Action>;
 }
 
-const TodoList: React.FC<Props> = ({ todos, setTodos }: Props) => {
+const TodoList: React.FC<Props> = ({ state, dispatch }: Props) => {
   return (
     <>
       <div className='flex justify-evenly w-[50%] flex-wrap my-4'>
-        {todos.map((todo) => (
+        {state.map((todo) => (
           // todo card with yellow background
           <SingleTodo
             todo={todo}
             key={todo.id}
-            todos={todos}
-            setTodos={setTodos}
+            todos={state}
+            dispatch={dispatch}
           />
         ))}
       </div>

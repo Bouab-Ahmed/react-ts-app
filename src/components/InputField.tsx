@@ -1,18 +1,23 @@
 import React, { useRef } from 'react';
+import { Action } from '../helpers/todoType';
 
 interface Props {
   todo: string;
   setTodo: React.Dispatch<React.SetStateAction<string>>;
-  addTodo: (e: React.FormEvent<HTMLFormElement>) => void;
+  dispatch: React.Dispatch<Action>;
 }
 
-const InputField = ({ todo, setTodo, addTodo }: Props) => {
+const InputField = ({ todo, setTodo, dispatch }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <form
       className='w-[95%]'
       onSubmit={(e) => {
-        addTodo(e);
+        e.preventDefault();
+        dispatch({
+          type: 'ADD_TODO',
+          payload: { id: Date.now(), content: todo, completed: false },
+        });
         inputRef.current?.blur();
       }}>
       <div className='w-[50%] relative mx-auto flex items-center'>

@@ -1,30 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TodoType } from '../helpers/todoType';
+import { Action, TodoType } from '../helpers/todoType';
 
 interface Props {
   todo: TodoType;
   todos: TodoType[];
-  setTodos: React.Dispatch<React.SetStateAction<TodoType[]>>;
+  dispatch: React.Dispatch<Action>;
 }
 
-const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
+const SingleTodo: React.FC<Props> = ({ todo, todos, dispatch }: Props) => {
   const [edit, setEdit] = useState(false);
   const [editTodo, setEditTodo] = useState(todo.content);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setTodos((prev) =>
-      prev.map((item) => {
-        if (item.id === todo.id) {
-          return {
-            ...item,
-            content: editTodo,
-          };
-        }
-        return item;
-      })
-    );
+    // setTodos((prev) =>
+    //   prev.map((item) => {
+    //     if (item.id === todo.id) {
+    //       return {
+    //         ...item,
+    //         content: editTodo,
+    //       };
+    //     }
+    //     return item;
+    //   })
+    // );
+    dispatch({
+      type: 'EDIT_TODO',
+      payload: { id: todo.id, content: editTodo, completed: todo.completed },
+    });
     setEdit(false);
   };
 
@@ -41,23 +45,23 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
         onSubmit={(e) => {
           handleEdit(e);
         }}>
-        {/* checkbox */}
         <input
           type='checkbox'
           className='h-[20px] w-[20px] rounded-full border-2 border-black'
           checked={todo.completed}
           onChange={() => {
-            setTodos((prev) =>
-              prev.map((item) => {
-                if (item.id === todo.id) {
-                  return {
-                    ...item,
-                    completed: !item.completed,
-                  };
-                }
-                return item;
-              })
-            );
+            // setTodos((prev) =>
+            //   prev.map((item) => {
+            //     if (item.id === todo.id) {
+            //       return {
+            //         ...item,
+            //         completed: !item.completed,
+            //       };
+            //     }
+            //     return item;
+            //   })
+            // );
+            dispatch({ type: 'TOGGLE_TODO', payload: todo.id });
           }}
         />
         {/* todo text */}
@@ -85,11 +89,11 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
           )}
         </div>
       </form>
-      {/* delete button */}
       <button
         className='px-[10px] py-[5px] rounded-[20px] bg-red-500 text-white active:scale-95'
         onClick={() => {
-          setTodos((prev) => prev.filter((item) => item.id !== todo.id));
+          // setTodos((prev) => prev.filter((item) => item.id !== todo.id));
+          dispatch({ type: 'REMOVE_TODO', payload: todo.id });
         }}>
         Delete
       </button>
