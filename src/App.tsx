@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import './App.css';
 import { TodoType } from './helpers/todoType';
 import InputField from './components/InputField';
+import TodoList from './components/TodoList';
+import { useLocalStorage } from 'usehooks-ts';
 
 const App: React.FC = () => {
   const [todo, setTodo] = useState<string>('');
-  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [todos, setTodos] = useLocalStorage<TodoType[]>('todos', []);
 
   const addTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ const App: React.FC = () => {
         Taskify
       </span>
       <InputField todo={todo} setTodo={setTodo} addTodo={addTodo} />
+      <TodoList todos={todos} setTodos={setTodos} />
     </div>
   );
 };
