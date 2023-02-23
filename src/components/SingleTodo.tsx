@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TodoType } from '../helpers/todoType';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
   const [edit, setEdit] = useState(false);
   const [editTodo, setEditTodo] = useState(todo.content);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +27,10 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
     );
     setEdit(false);
   };
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [edit]);
 
   return (
     <div
@@ -65,8 +70,9 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
           {edit ? (
             <input
               type='text'
+              ref={inputRef}
               value={editTodo}
-              className='mx-[10px] text-[20px] text-black'
+              className='mx-[10px] text-[20px] text-black focus:outline-none'
               onChange={(e) => setEditTodo(e.target.value)}
             />
           ) : (
