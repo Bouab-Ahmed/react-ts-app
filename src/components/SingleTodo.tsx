@@ -10,6 +10,23 @@ interface Props {
 const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
   const [edit, setEdit] = useState(false);
   const [editTodo, setEditTodo] = useState(todo.content);
+
+  const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setTodos((prev) =>
+      prev.map((item) => {
+        if (item.id === todo.id) {
+          return {
+            ...item,
+            content: editTodo,
+          };
+        }
+        return item;
+      })
+    );
+    setEdit(false);
+  };
+
   return (
     <div
       key={todo.id}
@@ -17,19 +34,7 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
       <form
         className='flex items-center'
         onSubmit={(e) => {
-          e.preventDefault();
-          setTodos((prev) =>
-            prev.map((item) => {
-              if (item.id === todo.id) {
-                return {
-                  ...item,
-                  content: editTodo,
-                };
-              }
-              return item;
-            })
-          );
-          setEdit(!edit);
+          handleEdit(e);
         }}>
         {/* checkbox */}
         <input
