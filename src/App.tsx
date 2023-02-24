@@ -12,11 +12,13 @@ const App: React.FC = () => {
   const todoReducer = (state: TodoType[], action: Action): TodoType[] => {
     switch (action.type) {
       case 'ADD_TODO':
+        console.log(state);
         setTodos(() => [...state, action.payload]);
-        return [...todos];
+        return [...todos, action.payload];
       case 'REMOVE_TODO':
-        setTodos((prev) => prev.filter((item) => item.id !== action.payload));
-        return todos;
+        state = todos.filter((todo) => todo.id !== action.payload);
+        setTodos(() => [...state]);
+        return [...state];
       case 'TOGGLE_TODO':
         return state.map((todo) => {
           if (todo.id === action.payload) {
@@ -28,7 +30,7 @@ const App: React.FC = () => {
           return todo;
         });
       case 'EDIT_TODO':
-        return state.map((todo) => {
+        const updatedtodos = state.map((todo) => {
           if (todo.id === action.payload.id) {
             return {
               ...todo,
@@ -37,15 +39,13 @@ const App: React.FC = () => {
           }
           return todo;
         });
+        setTodos(() => [...updatedtodos]);
+        return [...updatedtodos];
       default:
         return state;
     }
   };
-
   const [state, dispatch] = useReducer(todoReducer, todos);
-
-  // console.log(todo);
-  // console.log(todos);
 
   return (
     <div className='App'>
