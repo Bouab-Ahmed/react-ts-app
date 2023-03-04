@@ -14,11 +14,12 @@ const InputField = ({ todo, setTodo, dispatch }: Props) => {
       className='w-[95%]'
       onSubmit={(e) => {
         e.preventDefault();
+        inputRef.current?.blur();
         dispatch({
           type: 'ADD_TODO',
           payload: { id: Date.now(), content: todo, completed: false },
         });
-        inputRef.current?.blur();
+        setTodo('');
       }}>
       <div className='w-[50%] relative mx-auto flex items-center'>
         <input
